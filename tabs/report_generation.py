@@ -504,7 +504,7 @@ def generate_report(final_selection, student_info, all_data, additional_data):
     with open("header.png", "rb") as image_file:
         encoded_header = base64.b64encode(image_file.read()).decode()
 
-    with open("/Users/isaac/Library/Fonts/KoPubDotumLight.ttf", "rb") as font_file:
+    with open("KoPubDotumLight.ttf", "rb") as font_file:
         encoded_font = base64.b64encode(font_file.read()).decode()
 
     # 데이터 전처리 부분 수정
