@@ -3,6 +3,7 @@ from tabs import info_input, subject_filtering, comprehensive_filtering, final_f
 from data_loader import data, lowest_ability_codes
 from data_loader import load_data, lowest_ability_codes, additional_data
 import streamlit_authenticator as stauth
+import yaml
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=stauth.SafeLoader)
