@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ipsi-428408",
+  "private_key_id": "4e099f78a875da0b866e86910bbca37520a6c4d9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCvACMZ3X6GJo/Y\nkevGWrKRSqEF6cg4XmCE+8wDEhnbagHTt7PTRg7D//ZdejFXuZYRGoEEG4ezYBYZ\nhNyPC3O+PnPujaAULk3f27QzVoMuab/gL+AVQQHxE4FGUf2jim12wYI1MdiuYAyC\nb6qcbp04O4JYE8vihtY2ASpt1BtFRbRGIWy/PBJcH8Gn683B5tfs5EnkP3cQTG9W\nZHdu6pJMjzWMd+rDCom3hVPEFWm3sJmPCfkDw4XY5w9/iXgYjwYRk8LNVpGkKShp\ncczJAM5RUDu92AIsedzmXAdPfOg4zjVn9VEoUJOLdcQcr9/+dRi4ghnjHTGENAZy\n18eOp+sBAgMBAAECggEAUcrnnQQ4Sa0mWFvDbj8f7OaLoj7lVOtPg3hInzrLmRDP\n78uRofLBnfw5gvFEtLLKIA5aNLhFUaJcUesWR0lb/JQmDV5mbmhB/5opfEE4KO5G\nPxtBSc3LgYjTSDG0McbWaMYC/KfilYXQ8voMLPdKRmkR/+aoyaSp5C3hTdnwMQyf\ndHHmCg8p0Xnhg85aMQRf5qmwDpcqZtMl5THSfG6N2UTaSF5ys8o1bZLqNPMceYb3\naK/2GoWNpb88bVZKrGUkiQ2LVafEAdgiryXbHUaBMJzAY+Ru4VpuRplhgWvq7wqD\nGVDWvq7t6J0CkFTDzeqKAUE8tx6d+2wZA8LUDulEzQKBgQDo8yLJzKKTjA34UTko\nb9AjP58Fke/2LW0+kgXwmSW1yAmwMdt4dXiJ0LHCQb4Dk3Az/dycx8h7FfmJRWX0\nZe315MMReCIhit0/sQjgVYtDL4g6xCUSv4mGQA0h4AlEpWUZXtnJ9IlmjlYG8Jp7\nOiyADMjjSI3SQn13wzO923IeCwKBgQDAURYRKLJAXkJJD7F3puV2uvr6n1LQKFoV\nCs8bAyADyo9vzEjLk4pZw4m7NuUqHMSSZl3izbBf0nC+pORbO6+jqtrNVllW2pr5\ns1USgHd4XkgzP766yp/TMYw7PE7wIZxKOqsVz6Hc2iGxcZctRFXEvep0yg2ezqEI\ndOwF39yeowKBgQDFzn/B3/RFWe4a582jWp7g74s3DZ836YcUVKaakVEGNSCU7yEv\n/oAmdoIbM/wHyVDDtVN6BeNlMVm9iKJ0j4ErBd/mm55P4TzScp/Y7orcuCXz0M6y\nRtaemxELrNPx6IgarQI+jVmHLmI6bmCfNtzGtxR2ewuCeVdVNPpgw1D51QKBgGFT\nJ8W7QKoOiaELzhXtYka5zXWz12b8ZMotVC4pYLRKeFhtm5FaszNGH5ec6lBripdE\nMtMqoM19ZA02yVHaXMKJHn236zJnIvKm7LCWTt+dZxB4e/9vt35bnsoDdTdU6xEt\nq5M4JoPr6A0ynP0NjhIowlQkRMxPaXMsKJ24cp/dAoGAe8pI1caUsUqjCIEh9vf6\nBNetDztge5OLeNuDegSdvYjcCazfVW4Y7+1BrZQaGcjd4Qf2N1fsqzwG1aBGr3MG\njvvP1kDJQH9bJjFaOAG2ZpcvMqB6G9SmwChxJkfEDHkpOSYXPXE2rME+2SREdDKr\nf/i2XRf5Hv9jzh6KazxVGlM=\n-----END PRIVATE KEY-----\n",
+  "client_email": "susi-report@ipsi-428408.iam.gserviceaccount.com",
+  "client_id": "117333287180984617591",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/susi-report%40ipsi-428408.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
