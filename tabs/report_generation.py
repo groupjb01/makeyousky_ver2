@@ -24,11 +24,11 @@ from data_loader import ranking
 
 # 환경 변수 로드 및 OpenAI 클라이언트 설정
 load_dotenv()
-api_key = os.getenv('OPENAI_API_KEY')
+api_key = os.getenv('API_KEY')
 client = OpenAI(api_key=api_key)
 
 # 한글 폰트 설정
-font_path = '/Users/isaac/Library/Fonts/KoPubDotumLight.ttf'
+font_path = 'KoPubDotumLight.ttf'
 font_prop = fm.FontProperties(fname=font_path)
 plt.rcParams['font.family'] = font_prop.get_name()
 plt.rcParams['font.size'] = 12
