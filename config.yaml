@@ -1,0 +1,18 @@
+cookie:
+  expiry_days: 0
+  key: some_signature_key
+  name: some_cookie_name
+credentials:
+  usernames:
+    ayoung:
+      name: "\uC544\uC601\uC0D8"
+      password: $2b$12$xDupHoX7/tGwPMGSQ1ng7OX1I18Ewfkrg/jIqx2G9RQ4eDkjZ/VkO
+    sungho:
+      name: "\uC131\uD638\uC0D8"
+      password: $2b$12$VROxrcCID/xxhBqV9LAKUuT/NlRDrhRJZqAaSGpN1N8yCunVo36La
+    sunkyu:
+      name: "\uC120\uADDC\uC0D8"
+      password: $2b$12$cCpAHik33kEbGmMSlYo.Su.uJHoXhO./nxbJW49ufw6rI4e0FLvRW
+preauthorized:
+  emails:
+  - melsby@gmail.com
