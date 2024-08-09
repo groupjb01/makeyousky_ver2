@@ -46,7 +46,7 @@ if authentication_status:
         st.session_state['additional_data'] = additional_data
         # 데이터 로드
         if 'all_data' not in st.session_state:
-            st.session_state['all_data'] = load_data('data_240806_1610.xlsx')
+            st.session_state['all_data'] = load_data('data_240808_1735.xlsx')
     
         with tabs[0]:
             info_input.show_info_input()
