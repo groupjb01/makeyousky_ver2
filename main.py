@@ -1,6 +1,12 @@
 import streamlit as st
 import yaml
 import streamlit_authenticator as stauth
+# 페이지 설정을 스크립트의 가장 첫 부분으로 이동
+st.set_page_config(page_title="지략 수시전략 컨설팅 지원 시스템", layout="wide")
+
+from tabs import info_input, subject_filtering, comprehensive_filtering, final_filtering, report_generation, direct_upload
+from data_loader import data, lowest_ability_codes
+from data_loader import load_data, lowest_ability_codes, additional_data
 
 with open('config.yaml') as file:
     config = yaml.load(file, Loader=stauth.SafeLoader)
@@ -30,14 +36,7 @@ if authentication_status:
     authenticator.logout("Logout","sidebar")
     st.sidebar.title(f"Welcome {name}")
     
-    ## 로그인 후 기능들 작성 ##
-
-    # 페이지 설정을 스크립트의 가장 첫 부분으로 이동
-    st.set_page_config(page_title="지략 수시전략 컨설팅 지원 시스템", layout="wide")
-    
-    from tabs import info_input, subject_filtering, comprehensive_filtering, final_filtering, report_generation, direct_upload
-    from data_loader import data, lowest_ability_codes
-    from data_loader import load_data, lowest_ability_codes, additional_data
+    ## 로그인 후 기능들 작성 ## 
     
     def main():
         st.title("🖋️️ 지략 수시전략 컨설팅 지원 시스템 ")
