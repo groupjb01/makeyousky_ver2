@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from data_loader import data, ranking
+from data_loader import data, ranking, remove_duplicates
 from filters import filter_data_comprehensive
 from category_mapping import DETAIL_TO_MID_CATEGORY, MID_TO_MAIN_CATEGORY
 
@@ -80,6 +80,14 @@ def display_ranked_university_checklist(df, title, prefix=""):
             if st.checkbox(univ, key=f"{prefix}{title}_{univ}_{i}"):
                 selected_universities.append(univ)
     return selected_universities
+
+@st.cache_data
+def apply_second_filtering(df, selected_universities):
+    filtered_df = df[df['대학명'].isin(selected_universities)]
+    filtered_df = remove_duplicates(filtered_df)
+    filtered_df = sort_by_ranking(filtered_df)
+    return reorder_columns(filtered_df)
+
 
 def create_advanced_filters(prefix):
     filters = {}
@@ -162,7 +170,7 @@ def apply_advanced_filters(df, filters):
 
 
 def reorder_columns(df):
-    first_columns = ['선택', '대학명', '전형명', '모집단위', '2025년_모집인원', '2024년_경쟁률', '2024년_입결70%', '2024년_충원율(%)', '2025년_최저요약']
+    first_columns = ['선택', '대학명', '모집단위', '2024년_입결50%', '2024년_입결70%', '2024년_경쟁률', '전형명', '2025년_모집인원', '2024년_충원율(%)', '2025년_최저요약']
     other_columns = [col for col in df.columns if col not in first_columns + ['No.', '계열상세']]
 
     # '선택' 컬럼이 없는 경우 추가
@@ -204,19 +212,15 @@ def show_comprehensive_filtering():
                 if lowest_ability_filter:
                     filtered_data = filtered_data[filtered_data['2025년_수능최저코드'] <= student_info['lowest_ability_code']]
 
-                filtered_data = sort_by_ranking(filtered_data)
+                # 데이터 분류
+                general_data = filtered_data[filtered_data['분류'] == '일반']
+                new_advanced_data = filtered_data[filtered_data['분류'].isin(['신설', '첨단'])]
 
-                # 신설 및 첨단융합 학과 분리 (계열 필터링 적용)
-                new_or_advanced_data = data[(data['신설'] != '0') | (data['첨단융합'] == 1)]
-                new_or_advanced_data = new_or_advanced_data[new_or_advanced_data['전형구분'] == '종합']
-                new_or_advanced_data = filter_by_search_range(new_or_advanced_data, student_info, search_range)
-                new_or_advanced_data = apply_advanced_filters(new_or_advanced_data, filters)
+                general_data = sort_by_ranking(general_data)
+                new_advanced_data = sort_by_ranking(new_advanced_data)
 
-                if lowest_ability_filter:
-                    new_or_advanced_data = new_or_advanced_data[new_or_advanced_data['2025년_수능최저코드'] <= student_info['lowest_ability_code']]
-
-                st.session_state['comprehensive_first_filter_results'] = filtered_data
-                st.session_state['comprehensive_new_or_advanced'] = new_or_advanced_data
+                st.session_state['comprehensive_first_filter_results'] = general_data
+                st.session_state['comprehensive_new_or_advanced'] = new_advanced_data
                 st.success("1차 필터링이 완료되었습니다.")
             else:
                 st.warning("필터링 결과가 없습니다.")
@@ -240,18 +244,19 @@ def show_comprehensive_filtering():
 
     with col2:
         if st.button("2차 필터링", key="comprehensive_second_filter_button"):
-            df = st.session_state.get('comprehensive_first_filter_results', pd.DataFrame())
-            new_df = st.session_state.get('comprehensive_new_or_advanced', pd.DataFrame())
-            if isinstance(df, pd.DataFrame) and isinstance(new_df, pd.DataFrame):
-                selected = st.session_state.get('comprehensive_selected_universities', [])
-                if not df.empty and '대학명' in df.columns:
-                    filtered_df = df[df['대학명'].isin(selected)]
-                    filtered_df = sort_by_ranking(filtered_df)
-                    st.session_state['comprehensive_second_filter_results'] = filtered_df
+            general_df = st.session_state.get('comprehensive_first_filter_results', pd.DataFrame())
+            new_advanced_df = st.session_state.get('comprehensive_new_or_advanced', pd.DataFrame())
 
-                    # 선택된 대학의 신설 및 첨단융합 학과만 필터링
-                    new_filtered_df = new_df[new_df['대학명'].isin(selected)]
-                    st.session_state['comprehensive_new_or_advanced_filtered'] = new_filtered_df
+            if isinstance(general_df, pd.DataFrame) and isinstance(new_advanced_df, pd.DataFrame):
+                selected = st.session_state.get('comprehensive_selected_universities', [])
+
+                if not general_df.empty and '대학명' in general_df.columns:
+                    filtered_general_df = apply_second_filtering(general_df, selected)
+                    st.session_state['comprehensive_second_filter_results'] = filtered_general_df
+
+                if not new_advanced_df.empty and '대학명' in new_advanced_df.columns:
+                    filtered_new_advanced_df = apply_second_filtering(new_advanced_df, selected)
+                    st.session_state['comprehensive_new_or_advanced_filtered'] = filtered_new_advanced_df
 
                 st.success("2차 필터링이 완료되었습니다.")
             else:
@@ -262,42 +267,31 @@ def show_comprehensive_filtering():
         st.markdown("&nbsp;")
         st.subheader("2️⃣ 2차 필터링 결과")
         df = st.session_state['comprehensive_second_filter_results']
-        if isinstance(df, pd.DataFrame):
-            if not df.empty:
-                st.write("**필터링된 대학 리스트**")
-                if '대학명' in df.columns:
-                    for univ in df['대학명'].unique():
-                        st.write(f"**{univ}**")
-                        group = df[df['대학명'] == univ]
-
-                        group = reorder_columns(group)  # 컬럼 재정렬
-
-                        edited_df = st.data_editor(
-                            group,
-                            hide_index=True,
-                            column_config={
-                                "선택": st.column_config.CheckboxColumn(
-                                    "선택",
-                                    help="이 행을 선택하려면 체크하세요"
-                                )
-                            },
-                            disabled=group.columns.drop('선택'),
-                            key=f"editor_comprehensive_{univ}"
+        if isinstance(df, pd.DataFrame) and not df.empty:
+            st.write("**필터링된 대학 리스트**")
+            for univ in df['대학명'].unique():
+                st.write(f"**{univ}**")
+                group = df[df['대학명'] == univ]
+                edited_df = st.data_editor(
+                    group,
+                    hide_index=True,
+                    column_config={
+                        "선택": st.column_config.CheckboxColumn(
+                            "선택",
+                            help="이 행을 선택하려면 체크하세요"
                         )
-                        st.session_state[f'comprehensive_displayed_{univ}'] = edited_df
-                else:
-                    st.warning("필터링된 리스트에 '대학명' 열이 없습니다.")
-            else:
-                st.warning("필터링된 리스트에 데이터가 없습니다.")
+                    },
+                    disabled=group.columns.drop('선택'),
+                    key=f"editor_comprehensive_{univ}"
+                )
+                st.session_state[f'comprehensive_displayed_{univ}'] = edited_df
         else:
-            st.warning("필터링 결과가 DataFrame 형식이 아닙니다.")
+            st.warning("필터링된 리스트에 데이터가 없습니다.")
 
         # 신설 및 첨단융합 학과 표시
         st.subheader("신설 또는 첨단융합 학과")
         new_df = st.session_state.get('comprehensive_new_or_advanced_filtered', pd.DataFrame())
         if not new_df.empty:
-            new_df = reorder_columns(new_df)
-            new_df = sort_by_ranking(new_df)  # 랭킹 순으로 정렬
             edited_new_df = st.data_editor(
                 new_df,
                 hide_index=True,
@@ -313,6 +307,8 @@ def show_comprehensive_filtering():
             st.session_state['comprehensive_new_or_advanced_edited'] = edited_new_df
         else:
             st.write("선택된 대학의 신설 또는 첨단융합 학과가 없습니다.")
+
+
 
     with col3:
         if st.button("결과 저장", key="save_comprehensive_results_button"):

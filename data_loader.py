@@ -4,19 +4,46 @@ import streamlit as st
 import pandas as pd
 import json
 
+def classify_data(df):
+    """
+    데이터를 일반, 신설, 첨단으로 분류합니다.
+    """
+    df['분류'] = '일반'
+    if '신설' in df.columns:
+        df.loc[df['신설'] != '0', '분류'] = '신설'
+    if '첨단융합' in df.columns:
+        df.loc[df['첨단융합'] != 0, '분류'] = '첨단'
+    return df
+
+def remove_duplicates(df):
+    """
+    대학명, 전형구분, 전형명, 모집단위가 동일한 중복 데이터를 제거합니다.
+    중복이 있을 경우 첫 번째 항목만 유지합니다.
+    """
+    return df.drop_duplicates(subset=['대학명', '전형구분', '전형명', '모집단위'], keep='first')
+
+
+
 @st.cache_data
 def load_data(file_path):
-    return pd.read_excel(file_path)
+    df = pd.read_excel(file_path)
+    if '신설' in df.columns and '첨단융합' in df.columns:
+        df = classify_data(df)
+    return df
 
 def load_json(file_path):
     with open(file_path, 'r') as f:
         return json.load(f)
 
-data = load_data('data_240806_1610.xlsx')
+data = load_data('data_240808_1735.xlsx')
 additional_data = load_data('uni_info_summary_240802.xlsx')
 lowest_ability_data = load_json('lowest_ability_codes.json')
 lowest_ability_codes = lowest_ability_data['codes']
 lowest_ability_ui_options = lowest_ability_data['ui_options']
+
+
+
+
 
 def load_expert_knowledge(file_path='expert_knowledge.txt'):
     with open(file_path, 'r', encoding='utf-8') as file:
